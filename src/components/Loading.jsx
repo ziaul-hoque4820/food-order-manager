@@ -1,0 +1,74 @@
+import React from 'react'
+import { motion } from 'framer-motion';
+import Logo from '../pages/shared/Logo';
+
+function Loading({ isComplete = false }) {
+    return (
+        <div className='fixed inset-0 z-[9999] overflow-hidden bg-slate-950'>
+            {/* Left Panel */}
+            <motion.div
+                initial={{ x: 0 }}
+                animate={isComplete ? { x: '-100%' } : { x: 0 }}
+                transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-br from-slate-950 via-slate-900 to-cyan-950/40"
+            >
+                <div className="absolute inset-0 bg-gradient-to-br from-cyan-400/10 to-transparent" />
+            </motion.div>
+
+            {/* Right Panel */}
+            <motion.div
+                initial={{ x: 0 }}
+                animate={isComplete ? { x: '100%' } : { x: 0 }}
+                transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+                className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-slate-950 via-slate-900 to-cyan-950/40"
+            >
+                <div className="absolute inset-0 bg-gradient-to-bl from-cyan-400/10 to-transparent" />
+            </motion.div>
+
+            {/* Center Content */}
+            <motion.div
+                initial={{ opacity: 1 }}
+                animate={isComplete ? { opacity: 0 } : { opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0 flex items-center justify-center z-10"
+            >
+                <div className="flex flex-col items-center gap-8">
+                    {/* Logo */}
+                    <div className="name-container">
+                        <h1 className="text-6xl md:text-8xl font-black tracking-wider text-gradient">
+                            <Logo />
+                        </h1>
+                    </div>
+
+                    {/* Loading Dots */}
+                    <div className="flex gap-2">
+                        {[0, 1, 2].map((i) => (
+                            <div
+                                key={i}
+                                className="dot"
+                                style={{ animationDelay: `${i * 0.2}s` }}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </motion.div>
+
+            {/* Particles */}
+            <div className="particles">
+                {[...Array(15)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="particle"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            animationDelay: `${Math.random() * 3}s`,
+                            animationDuration: `${Math.random() * 3 + 2}s`
+                        }}
+                    />
+                ))}
+            </div>
+        </div>
+    )
+}
+
+export default Loading
