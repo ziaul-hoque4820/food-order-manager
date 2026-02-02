@@ -35,7 +35,7 @@ function Loading({ isComplete = false }) {
                 <div className="flex flex-col items-center gap-8">
                     {/* Logo */}
                     <div className="name-container">
-                        <h1 className="text-6xl md:text-8xl font-black tracking-wider text-gradient">
+                        <h1 className="text-6xl md:text-8xl font-black tracking-wider">
                             <Logo />
                         </h1>
                     </div>
