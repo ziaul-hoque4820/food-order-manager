@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigation } from 'react-router-dom'
 import Loading from '../components/Loading';
+import Navbar from '../pages/shared/Navbar';
 
 function RootLayout() {
     const navigation = useNavigation();
@@ -29,7 +30,12 @@ function RootLayout() {
         <>
             {isLoading && <Loading isComplete={false} />}
             <div>
-                <Outlet />
+                <header>
+                    <Navbar />
+                </header>
+                <main>
+                    <Outlet />
+                </main>
             </div>
         </>
     )
