@@ -10,8 +10,8 @@ const Logo = () => {
 
             {/* text logo */}
             <div className="font-bold text-4xl">
-                <span className="text-gray-100">Food</span>
-                <span className="text-[#7efff5]">Order</span>
+                <span className="text-gray-100">Cook</span>
+                <span className="text-[#7efff5]">Food</span>
             </div>
         </Link>
     );

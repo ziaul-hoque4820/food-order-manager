@@ -67,6 +67,97 @@ function Loading({ isComplete = false }) {
                     />
                 ))}
             </div>
+
+            {/* Styles */}
+            <style>{`
+                .text-gradient {
+                    background: linear-gradient(
+                        135deg,
+                        #22d3ee 0%,
+                        #0ea5e9 25%,
+                        #38bdf8 50%,
+                        #0ea5e9 75%,
+                        #22d3ee 100%
+                    );
+                    background-size: 200% 200%;
+                    background-clip: text;
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    animation: gradientShift 3s ease infinite;
+                    text-shadow: 0 0 40px rgba(56, 189, 248, 0.35);
+                }
+
+                @keyframes gradientShift {
+                    0%, 100% { background-position: 0% 50%; }
+                    50% { background-position: 100% 50%; }
+                }
+
+                .name-container {
+                    animation: glowPulse 2s ease-in-out infinite;
+                }
+
+                @keyframes glowPulse {
+                    0%, 100% {
+                        filter: drop-shadow(0 0 20px rgba(56, 189, 248, 0.3));
+                    }
+                    50% {
+                        filter: drop-shadow(0 0 40px rgba(56, 189, 248, 0.6));
+                    }
+                }
+
+                .dot {
+                    width: 8px;
+                    height: 8px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #22d3ee, #38bdf8);
+                    animation: dotPulse 1.5s ease-in-out infinite;
+                }
+
+                @keyframes dotPulse {
+                    0%, 100% {
+                        transform: scale(1);
+                        opacity: 0.5;
+                    }
+                    50% {
+                        transform: scale(1.5);
+                        opacity: 1;
+                    }
+                }
+
+                .particles {
+                    position: absolute;
+                    inset: 0;
+                    overflow: hidden;
+                    pointer-events: none;
+                }
+
+                .particle {
+                    position: absolute;
+                    width: 4px;
+                    height: 4px;
+                    background: rgba(56, 189, 248, 0.6);
+                    border-radius: 50%;
+                    animation: particleFloat linear infinite;
+                }
+
+                @keyframes particleFloat {
+                    0% {
+                        transform: translateY(100vh) scale(0);
+                        opacity: 0;
+                    }
+                    10% { opacity: 1; }
+                    90% { opacity: 1; }
+                    100% {
+                        transform: translateY(-100vh) scale(1);
+                        opacity: 0;
+                    }
+                }
+
+                * {
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                }
+            `}</style>
         </div>
     )
 }
