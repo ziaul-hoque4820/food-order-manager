@@ -29,7 +29,7 @@ const Navbar = () => {
                     {/* Language Selector */}
                     <button
                         onClick={handleLanguageChange}
-                        className="px-3 py-1 w-15 border border-gray-300 rounded-md text-sm font-medium text-white transition-colors duration-200 cursor-pointer"
+                        className="px-3 py-1 w-15 border border-gray-300 rounded-md text-sm font-medium hover:text-cyan-300 hover:border-cyan-300 text-white transition-colors duration-200 cursor-pointer"
                     >
                         {currentLanguage}
                     </button>
