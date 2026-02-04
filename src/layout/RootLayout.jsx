@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Outlet, useNavigation } from 'react-router-dom'
 import Loading from '../components/Loading';
 import Navbar from '../pages/shared/Navbar';
+import Footer from '../pages/shared/Footer';
 
 function RootLayout() {
     const navigation = useNavigation();
@@ -36,6 +37,7 @@ function RootLayout() {
                 <main>
                     <Outlet />
                 </main>
+                <Footer />
             </div>
         </>
     )
