@@ -1,50 +1,6 @@
 import { useState } from "react";
 import { useOrder } from "../../context/OrderContext";
-
-const intentOptions = [
-    {
-        id: "COUPLE",
-        emoji: "❤️",
-        title: "Couple Dining",
-        subtitle: "Romantic table for two",
-        image: ""
-    },
-    {
-        id: "FRIENDS",
-        emoji: "🎉",
-        title: "Friends & Party",
-        subtitle: "Group gatherings & celebrations",
-        image: ""
-    },
-    {
-        id: "SNACKS",
-        emoji: "☕",
-        title: "Snacks & Coffee",
-        subtitle: "Quick bites & beverages",
-        image: ""
-    },
-    {
-        id: "BREAKFAST",
-        emoji: "🍱",
-        title: "Breakfast / Lunch",
-        subtitle: "Morning & midday meals",
-        image: ""
-    },
-    {
-        id: "TAKEAWAY",
-        emoji: "🥡",
-        title: "Takeaway",
-        subtitle: "Order to go",
-        image: ""
-    },
-    {
-        id: "WEDDING",
-        emoji: "💒",
-        title: "Wedding",
-        subtitle: "Special occasions & celebrations",
-        image: ""
-    },
-];
+import { intentOptions } from "../../data/user-intent";
 
 export default function IntentSelector() {
     const { setIntent } = useOrder();
@@ -57,7 +13,7 @@ export default function IntentSelector() {
 
     return (
         <div className="min-h-[calc(100vh-8rem)] bg-slate-800 p-4 md:p-8">
-            <div className="max-w-6xl mx-auto">
+            <div className="max-w-7xl mx-auto">
 
                 {/* Header */}
                 <div className="text-center mb-8">
@@ -75,9 +31,7 @@ export default function IntentSelector() {
                         <div
                             key={option.id}
                             onClick={() => handleIntentSelect(option.id)}
-                            className={`group relative h-80 rounded-xl overflow-hidden cursor-pointer transition-all duration-500 
-                            transform hover:-translate-y-2 hover:shadow-2xl
-                            ${selectedIntent === option.id ? "ring-4 ring-red-400 scale-[1.03]" : ""}
+                            className={`group relative h-80 rounded-xl overflow-hidden cursor-pointer transition-all duration-500 transform ${selectedIntent === option.id ? "ring-4 ring-red-400 scale-[1.03]" : ""}
                             `}
                         >
                             {/* Background Image */}
