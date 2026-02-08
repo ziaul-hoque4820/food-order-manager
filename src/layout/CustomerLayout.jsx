@@ -25,11 +25,13 @@ export default function CustomerLayout() {
     }
 
     return (
-        <>
+        <div className="h-screen flex flex-col overflow-hidden">
             {isLoading && <Loading isComplete={false} />}
             <Navbar />
-            <Outlet />
+            <main className="flex-1 overflow-hidden">
+                <Outlet />
+            </main>
             <Footer />
-        </>
+        </div>
     );
 }
