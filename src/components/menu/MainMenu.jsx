@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { foods } from "../../data/food-data";
 import { useOrder } from "../../context/OrderContext";
 import { intentOptions } from "../../data/user-intent";
+import { useNavigate } from "react-router-dom";
 
 const CATEGORY_TABS = [
     { key: "starter", label: "🥗 Starter", icon: "🥗" },
@@ -14,6 +15,7 @@ const CATEGORY_TABS = [
 
 function MainMenu({ language = "en" }) {
     const { intent } = useOrder();
+    const navigate = useNavigate();
     const [activeCategory, setActiveCategory] = useState("drinks");
 
     const intentData = intentOptions.find(option => option.id === intent);
@@ -71,6 +73,7 @@ function MainMenu({ language = "en" }) {
                                 transition={{ delay: index * 0.05 }}
                                 whileHover={{ y: -8 }}
                                 whileTap={{ scale: 0.98 }}
+                                onClick={() => navigate(`/product/${food.id}`)}
                                 className="bg-slate-900 rounded-2xl shadow-xl overflow-hidden border border-slate-700 hover:border-[#079992] transition-all duration-300 group"
                             >
                                 {/* Image Container */}
