@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useParams, useNavigate } from "react-router-dom";
 import { foods } from "../../data/food-data";
 import { useOrder } from "../../context/OrderContext";
@@ -17,17 +17,27 @@ function ProductDetails({ language = "en" }) {
     const { id } = useParams();
     const navigate = useNavigate();
 
+    // Product finding - check korchi ID match hocche kina
     const product = foods.find(food => food.id === id);
 
     const [selectedImage, setSelectedImage] = useState(0);
     const [selectedOptions, setSelectedOptions] = useState({});
     const [selectedTaste, setSelectedTaste] = useState(TASTE_OPTIONS[0]);
+    const [quantity, setQuantity] = useState(1);
+
+    // Debug korar jonno
+    useEffect(() => {
+        console.log("URL ID:", id);
+        console.log("Found Product:", product);
+        console.log("All Foods:", foods);
+    }, [id, product]);
 
     if (!product) {
         return (
-            <div className="min-h-screen bg-slate-800 flex items-center justify-center">
+            <div className="h-full bg-slate-800 flex items-center justify-center">
                 <div className="text-center">
                     <h2 className="text-2xl font-bold text-white mb-4">Product Not Found</h2>
+                    <p className="text-gray-400 mb-4">ID: {id}</p>
                     <button
                         onClick={() => navigate(-1)}
                         className="bg-gradient-to-r from-[#079992] to-[#38ada9] text-white px-6 py-3 rounded-full font-semibold"
@@ -46,10 +56,34 @@ function ProductDetails({ language = "en" }) {
         }));
     };
 
+    const calculateTotalPrice = () => {
+        let total = product.discountPrice || product.price;
+        
+        // Add taste extra price
+        total += selectedTaste.extraPrice;
+        
+        // Add options extra prices
+        Object.values(selectedOptions).forEach(option => {
+            if (option.extraPrice) {
+                total += option.extraPrice;
+            }
+        });
+        
+        return total * quantity;
+    };
+
+    const handleQuantityChange = (type) => {
+        if (type === 'increase') {
+            setQuantity(prev => prev + 1);
+        } else if (type === 'decrease' && quantity > 1) {
+            setQuantity(prev => prev - 1);
+        }
+    };
+
     return (
-        <div className="min-h-screen bg-slate-800 flex flex-col lg:h-screen">
-            {/* Header - Fixed */}
-            <div className="bg-gradient-to-r from-slate-900 to-slate-800 px-4 md:px-6 lg:px-8 py-2 border-b border-slate-700 flex-shrink-0">
+        <div className="h-full bg-slate-800 flex flex-col overflow-y-auto">
+            {/* Header - Sticky */}
+            <div className="sticky top-0 z-10 bg-gradient-to-r from-slate-900 to-slate-800 px-4 md:px-6 lg:px-8 py-4 border-b border-slate-700">
                 <div className="max-w-7xl mx-auto flex items-center gap-4">
                     <button
                         onClick={() => navigate(-1)}
@@ -61,18 +95,18 @@ function ProductDetails({ language = "en" }) {
                 </div>
             </div>
 
-            {/* Content - Scrollable on medium, fixed on large screens */}
-            <div className="flex-1 overflow-y-auto scrollbar-hide lg:overflow-hidden">
-                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6 lg:py-6 h-full">
-                    <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 lg:h-full">
-                        {/* Left Side - Images */}
+            {/* Content */}
+            <div className="flex-1">
+                <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-3">
+                    <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+                        {/* Left Side - Images (Sticky on large screens) */}
                         <motion.div
                             initial={{ opacity: 0, x: -20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="space-y-4 lg:flex lg:flex-col"
+                            className="space-y-4 lg:sticky lg:top-24 lg:self-start"
                         >
-                            {/* Main Image - Reduced height */}
-                            <div className="bg-slate-900 rounded-2xl overflow-hidden border border-slate-700 h-64 md:h-80 lg:h-[500px] flex-shrink-0">
+                            {/* Main Image */}
+                            <div className="bg-slate-900 rounded-2xl overflow-hidden border border-slate-700 h-64 md:h-80 lg:h-[500px]">
                                 {product.images?.[selectedImage] ? (
                                     <img
                                         src={product.images[selectedImage]}
@@ -87,7 +121,7 @@ function ProductDetails({ language = "en" }) {
                             </div>
 
                             {/* Thumbnail Images - 5 images in a row */}
-                            <div className="grid grid-cols-5 gap-2 flex-shrink-0">
+                            <div className="grid grid-cols-5 gap-2">
                                 {product.images && product.images.length > 0 ? (
                                     product.images.map((img, index) => (
                                         <button
@@ -119,7 +153,7 @@ function ProductDetails({ language = "en" }) {
                             </div>
 
                             {/* Tags & Badges */}
-                            <div className="flex flex-wrap gap-2 flex-shrink-0">
+                            <div className="flex flex-wrap gap-2">
                                 {product.isPopular && (
                                     <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white text-xs font-bold px-3 py-1.5 rounded-full">
                                         🔥 Popular
@@ -142,11 +176,11 @@ function ProductDetails({ language = "en" }) {
                             </div>
                         </motion.div>
 
-                        {/* Right Side - Details with internal scroll on large screens */}
+                        {/* Right Side - Details (Scrollable) */}
                         <motion.div
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="space-y-4 lg:overflow-y-auto lg:scrollbar-hide lg:pr-2"
+                            className="space-y-4 pb-6"
                         >
                             {/* Product Name */}
                             <div>
@@ -222,7 +256,7 @@ function ProductDetails({ language = "en" }) {
                                         <button
                                             key={taste.id}
                                             onClick={() => setSelectedTaste(taste)}
-                                            className={`p-3 rounded-lg border-2 transition-all duration-300 ${selectedTaste.id === taste.id
+                                            className={`px-3 py-2 rounded-lg border-2 transition-all duration-300 ${selectedTaste.id === taste.id
                                                 ? "border-[#079992] bg-[#079992]/10 text-white scale-105"
                                                 : "border-slate-700 bg-slate-800 text-gray-400 hover:border-slate-600"
                                                 }`}
@@ -281,14 +315,21 @@ function ProductDetails({ language = "en" }) {
                                 <h3 className="text-white font-semibold mb-3 text-sm">Quantity</h3>
                                 <div className="flex items-center gap-4">
                                     <button
-                                        className="w-10 h-10 bg-slate-700 hover:bg-slate-600 rounded-full flex items-center justify-center text-white text-xl font-bold transition-all duration-300"
+                                        onClick={() => handleQuantityChange('decrease')}
+                                        disabled={quantity <= 1}
+                                        className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-xl font-bold transition-all duration-300 ${
+                                            quantity <= 1 
+                                                ? 'bg-slate-800 text-gray-600 cursor-not-allowed' 
+                                                : 'bg-slate-700 hover:bg-slate-600'
+                                        }`}
                                     >
                                         −
                                     </button>
                                     <span className="text-xl font-bold text-white w-12 text-center">
-                                        0
+                                        {quantity}
                                     </span>
                                     <button
+                                        onClick={() => handleQuantityChange('increase')}
                                         className="w-10 h-10 bg-gradient-to-r from-[#079992] to-[#38ada9] hover:shadow-lg hover:shadow-[#60a3bc]/50 rounded-full flex items-center justify-center text-white text-xl font-bold transition-all duration-300"
                                     >
                                         +
@@ -297,17 +338,17 @@ function ProductDetails({ language = "en" }) {
                             </div>
 
                             {/* Total Price & Add to Cart */}
-                            <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-5 border border-slate-700 space-y-4 lg:sticky lg:bottom-0 lg:bg-opacity-95 lg:backdrop-blur-sm">
+                            <div className="bg-gradient-to-r from-slate-900 to-slate-800 rounded-xl p-5 border border-slate-700 space-y-4">
                                 <div className="flex items-center justify-between">
                                     <div>
                                         <p className="text-gray-400 text-xs mb-1">Total Price</p>
                                         <p className="text-3xl font-bold text-[#079992]">
-                                            ৳0
+                                            ৳{calculateTotalPrice()}
                                         </p>
                                     </div>
                                     <div className="text-right">
                                         <p className="text-gray-400 text-xs">Quantity</p>
-                                        <p className="text-lg font-semibold text-white">0 item(s)</p>
+                                        <p className="text-lg font-semibold text-white">{quantity} item(s)</p>
                                     </div>
                                 </div>
 
@@ -315,7 +356,7 @@ function ProductDetails({ language = "en" }) {
                                     disabled={!product.isAvailable}
                                     className={`w-full py-3 rounded-xl font-bold text-base transition-all duration-300 ${product.isAvailable
                                         ? "bg-gradient-to-r from-[#079992] to-[#38ada9] hover:shadow-lg hover:shadow-[#60a3bc]/50 text-white hover:scale-105 cursor-pointer"
-                                        : "bg-gray-600 text-gray-400"
+                                        : "bg-gray-600 text-gray-400 cursor-not-allowed"
                                         }`}
                                 >
                                     {product.isAvailable ? (
